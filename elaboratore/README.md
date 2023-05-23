@@ -1,2 +1,2 @@
-# Elaboratore grafico
-Programma che visualizza una funzione matematica
+*Elaboratore grafico*
+programma che visualizza il grafico di una funzione matematica

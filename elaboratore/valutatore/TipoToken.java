@@ -2,7 +2,6 @@ package valutatore;
 
 public enum TipoToken {
     
-    
     PARENTESI_APERTA("("),
     PARENTESI_CHIUSA(")"),
     PIU("+"),
