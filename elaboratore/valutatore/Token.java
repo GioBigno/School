@@ -14,4 +14,12 @@ public class Token {
         this.dato = dato;
     }
     
+    public TipoToken getTipo(){
+        return tipo;
+    }
+    
+    public double getDato(){
+        return dato;
+    }
+    
 }

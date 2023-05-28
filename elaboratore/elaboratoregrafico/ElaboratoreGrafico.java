@@ -1,6 +1,7 @@
 package elaboratoregrafico;
 
 import java.util.Scanner;
+import valutatore.TokenString;
 
 public class ElaboratoreGrafico {
 
@@ -13,6 +14,9 @@ public class ElaboratoreGrafico {
         System.out.println("inserisci espressione: ");
         espressione = in.nextLine();
         
+        TokenString t = new TokenString(espressione);
+        
+        t.printList();
         
     }
     
