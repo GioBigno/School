@@ -9,7 +9,8 @@ public enum TipoToken {
     PER("*"),
     DIVISO("/"),
     ELEVATO("^"),
-    NUMERO("");
+    NUMERO(""),
+    VARIABILE("");
     
     public final String nome;
     

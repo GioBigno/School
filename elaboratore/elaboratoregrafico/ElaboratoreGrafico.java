@@ -1,5 +1,6 @@
 package elaboratoregrafico;
 
+import grafica.Finestra;
 import java.util.Scanner;
 import valutatore.TokenString;
 
@@ -9,15 +10,9 @@ public class ElaboratoreGrafico {
     
     public static void main(String[] args) {
        
-        Scanner in = new Scanner(System.in);
+        Finestra f = new Finestra();
         
-        System.out.println("inserisci espressione: ");
-        espressione = in.nextLine();
-        
-        TokenString t = new TokenString(espressione);
-        
-        t.printList();
-        
+        f.setVisible(true);
     }
     
 }
