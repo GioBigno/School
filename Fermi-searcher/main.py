@@ -2,7 +2,7 @@ import requests
 import os
 import io
 
-#le tue credenziali del fermi
+#le tue credenziali del fermi (base64) 
 auth = 'tue credenziali'
 
 def request_url(s):
