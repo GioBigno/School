@@ -7,24 +7,25 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import valutatore.TokenString;
 
-public class Finestra extends JFrame implements ActionListener{
+public class Finestra extends JFrame implements ActionListener, MouseWheelListener{
     
     private Grafico grafico;
     private JTextField label;
-    private TokenString funzione;
     
     public Finestra(){
         super();
         
-        grafico = new Grafico(this, funzione);
+        grafico = new Grafico(this);
         label = new JTextField();
-        funzione  = new TokenString();
         
         setSize(900, 700);
         setLocationRelativeTo(null);
@@ -44,16 +45,16 @@ public class Finestra extends JFrame implements ActionListener{
         add(main);
         label.addActionListener(this);
         
+        addMouseWheelListener(this);
+        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("azione");
-        grafico.aggiorna(label.getText());
+        grafico.aggiornaFunzione(label.getText());
     }
-    
-    
     
     public int getGraphicWidth(){
         
@@ -63,6 +64,12 @@ public class Finestra extends JFrame implements ActionListener{
     public int getGraphicHeight(){
         
         return grafico.getHeight();
+    }
+    
+    public void mouseWheelMoved(MouseWheelEvent e){
+    	
+    	grafico.aggiornaZoom(e.getWheelRotation());
+    	
     }
     
 }
