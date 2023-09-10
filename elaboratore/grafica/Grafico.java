@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import valutatore.TokenString;
+import java.awt.geom.*;
+import java.awt.Point;
 
 public class Grafico extends JPanel{
 
@@ -19,80 +21,124 @@ public class Grafico extends JPanel{
     private BufferedImage image;
     private Graphics2D g2d;
     
+    int width;
+    int height;
+    
     double zoom;
+    
+    AffineTransform screenToGraph;
+    AffineTransform graphToScreen;
     
     public Grafico(Finestra parent){
         super();
         
         this.parent = parent;
         this.funzione  = new TokenString();
-        zoom = 5;
+        zoom = 1;
         setBackground(Color.white);
-         
+        
+        screenToGraph = new AffineTransform();
+        graphToScreen = new AffineTransform();
+    }
+    
+    public void geometryChanged(int width, int heights){
+        this.width = width;
+        this.height = heights;
+        computeMatrix();
+    }
+    
+    void resetMatrix(){
+        screenToGraph = new AffineTransform();
+        graphToScreen = new AffineTransform();
+    }
+    
+    public void computeMatrix(){
+        
+        resetMatrix();
+        
+        graphToScreen.translate(width/2, height/2);
+        graphToScreen.scale(zoom, zoom);
+        graphToScreen.scale(1, -1);
+        
+        screenToGraph.scale(1, -1);
+        screenToGraph.scale(1/zoom, 1/zoom);
+        screenToGraph.translate(-(width/2), -(height/2));
     }
 
     public void paint(Graphics g) {
         super.paint(g);
         
-        int width = parent.getGraphicWidth();
-        int height = parent.getGraphicHeight();
+        width = parent.getGraphicWidth();
+        height = parent.getGraphicHeight();
         
-        int[] xs = new int[width];
-        int[] ys = new int[width];
-        
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        g2d = image.createGraphics();
+        Point2D[] pointScreen = new Point2D.Double[width];
+        Point2D[] pointGraph = new Point2D.Double[width];
         
         for(int i=0; i<width; i++){
-            
-            double x = i-(width/2);
-            x = x / zoom;
-                   
-            double y = funzione.risolvi(x);
-            
-            //System.out.println("i = "+i+", x = "+x+", y = "+y);
-            
-            y = height - y;
-            y = y - height/2;
-            xs[i] = (int)Math.round(i);
-            ys[i] = (int)Math.round(y);
+            pointScreen[i] = new Point2D.Double();
+            pointGraph[i] = new Point2D.Double();
         }
-        
+
+        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        g2d = image.createGraphics();
         g2d.setColor(Color.white);
         g2d.fillRect(0, 0, width, height);
-        
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(new BasicStroke(3.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
-			 
-        g2d.setColor(Color.BLACK);
         
-        g2d.drawPolyline(xs, ys, width);
-        
-        g2d.setColor(Color.blue);
-        g2d.drawLine(0, height/2, width, height/2);
-        g2d.drawLine(width/2, 0, width/2, height);
-        
-        for(int i=0; i<width; i+=50){
-        	g2d.drawLine(i, height/2-8, i, height/2+8);
-        	String s = ""+(i-width/2)/zoom;
-        	g2d.drawString(s.substring(0, 3), i, height/2+20);
+        for(int i=0; i<width; i++){
+            pointScreen[i].setLocation(i, 0);
         }
-      
+        
+        screenToGraph.transform(pointScreen, 0, pointGraph, 0, width);
+        
+        for(int i=0; i<width; i++){
+            pointGraph[i].setLocation(pointGraph[i].getX(), funzione.risolvi(pointGraph[i].getX())); 
+        }
+        
+        graphToScreen.transform(pointGraph, 0, pointScreen, 0, width);
+        
+        int[] xInt = new int[width];
+        int[] yInt = new int[width];
+     
+        for(int i=0; i<width; i++){
+            xInt[i] = i;
+            yInt[i] = (int)pointScreen[i].getY();
+        }
+        
+        g2d.setColor(Color.BLACK);
+        g2d.drawPolyline(xInt, yInt, width);
+  
+        //asse x
+        g2d.setColor(Color.red);
+        g2d.drawLine(0, height/2, width, height/2);
+        //asse y
+        g2d.drawLine(width/2, 0, width/2, height);
+
         g.drawImage(image,0,0, this);
-}
+    }
     
     public void aggiornaFunzione(String funzione){
         
         this.funzione.setFunzione(funzione);
+        
+        zoom = 1;
+        
+        resetMatrix();
+        computeMatrix();
         repaint();
     }
     
     public void aggiornaZoom(int diff){
-    	//TODO
-    	double old_zoom = zoom;
-    	zoom -= diff*(1/zoom*500);
-    	System.out.println("zoom: " + (zoom-old_zoom));
-    	repaint();
+                
+        if(diff < 0){
+            zoom *= 1.5;
+        }else{
+            zoom /= 1.5;
+        }
+        
+        computeMatrix();
+        repaint();
     }
     
 }

@@ -9,12 +9,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import valutatore.TokenString;
+
 
 public class Finestra extends JFrame implements ActionListener, MouseWheelListener{
     
@@ -47,9 +50,21 @@ public class Finestra extends JFrame implements ActionListener, MouseWheelListen
         
         addMouseWheelListener(this);
         
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent componentEvent) {
+                
+                if(componentEvent.COMPONENT_RESIZED != 0){
+                
+                    grafico.geometryChanged(grafico.getWidth(), grafico.getHeight());
+                }
+            }
+        });
+        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("azione");
