@@ -39,7 +39,7 @@ public class TokenString {
         for(int i=0; i<funzione.length(); i++){
             
             char corrente = funzione.charAt(i);
-            System.out.println("analizzo: "+corrente);
+            //System.out.println("analizzo: "+corrente);
             
             if(Character.isDigit(corrente)){
                 
@@ -60,43 +60,43 @@ public class TokenString {
                 }
             }else if(isSimbolo(corrente)){
                 
-                System.out.println("trovato simbolo");
+                //System.out.println("trovato simbolo");
                 
                 decimale=0;
                 if(numero){
                     numero = false;
-                    System.out.println("add numero, "+valore);
+                    //System.out.println("add numero, "+valore);
                     tokenList.add(new Token(TipoToken.NUMERO, valore));
                     valore = 0;
                 }
                 
                 switch(corrente){
                     case '(':
-                        System.out.println("add simbolo");
+                        //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.PARENTESI_APERTA));
                         break;
                     case ')':
-                        System.out.println("add simbolo");
+                        //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.PARENTESI_CHIUSA));
                         break;
                     case '+':
-                        System.out.println("add simbolo");
+                        //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.PIU));
                         break;
                     case '-':
-                        System.out.println("add simbolo");
+                        //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.MENO));
                         break;
                     case '*':
-                        System.out.println("add simbolo");
+                        //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.PER));
                         break;
                     case '/':
-                        System.out.println("add simbolo");
+                        //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.DIVISO));
                         break;
                     case '^':
-                        System.out.println("add simbolo");
+                        //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.ELEVATO));
                         break;
                 }
@@ -114,7 +114,7 @@ public class TokenString {
         
         if(numero){
             numero = false;
-            System.out.println("add numero, "+valore);
+            //System.out.println("add numero, "+valore);
             tokenList.add(new Token(TipoToken.NUMERO, valore));
             valore = 0;
         }

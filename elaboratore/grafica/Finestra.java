@@ -1,25 +1,24 @@
 package grafica;
 
-import com.sun.java.accessibility.util.AWTEventMonitor;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import valutatore.TokenString;
 
-
-public class Finestra extends JFrame implements ActionListener, MouseWheelListener{
+public class Finestra extends JFrame implements ActionListener, MouseWheelListener, MouseMotionListener, MouseListener{
     
     private Grafico grafico;
     private JTextField label;
@@ -60,14 +59,15 @@ public class Finestra extends JFrame implements ActionListener, MouseWheelListen
             }
         });
         
+        addMouseMotionListener(this);
+        addMouseListener(this);
+        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     
-    
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("azione");
         grafico.aggiornaFunzione(label.getText());
     }
     
@@ -83,8 +83,33 @@ public class Finestra extends JFrame implements ActionListener, MouseWheelListen
     
     public void mouseWheelMoved(MouseWheelEvent e){
     	
-    	grafico.aggiornaZoom(e.getWheelRotation());
-    	
+    	grafico.aggiornaZoom(e.getWheelRotation());	
     }
+    
+    public void mouseDragged(MouseEvent e){
+        grafico.dragged(e.getPoint().x, e.getPoint().y);
+    }
+    
+    public void mouseMoved(MouseEvent e){
+         grafico.move(e.getPoint().x, e.getPoint().y);
+    }
+    
+    public void mouseClicked(MouseEvent e){    
+    }
+
+
+    public void mousePressed(MouseEvent e){
+    }
+
+
+    public void mouseReleased(MouseEvent e){
+    }
+
+    public void mouseEntered(MouseEvent e){       
+    }
+
+
+    public void mouseExited(MouseEvent e){      
+    }  
     
 }
