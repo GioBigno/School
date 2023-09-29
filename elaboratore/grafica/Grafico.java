@@ -55,12 +55,12 @@ public class Grafico extends JPanel{
         computeMatrix();
     }
     
-    void resetMatrix(){
+    private void resetMatrix(){
         screenToGraph = new AffineTransform();
         graphToScreen = new AffineTransform();
     }
     
-    public void computeMatrix(){
+    private void computeMatrix(){
         
         resetMatrix();
         
@@ -170,21 +170,36 @@ public class Grafico extends JPanel{
             }
             num_cifre++;
         }
-        
+                
         double max = Math.pow(10, num_cifre);
         double min = max/2.0;
         
         dim_barra = max - (dim_assex / NUM_BARRE) < (dim_assex / NUM_BARRE) - min ? max : min;
         
-        for(int i=-(NUM_BARRE/2); i<NUM_BARRE; i++){
-               
-            Point2D.Double xGraph = new Point2D.Double(dim_barra*i, 0);
+        double startX = pointGraph[0].getX();
+        startX -= dim_barra;
+        startX += dim_barra - (startX % dim_barra);
+        
+        for(int i=0; i<NUM_BARRE*2; i++){
+            
+            Point2D.Double xGraph = new Point2D.Double(startX + dim_barra*i, 0);
             Point2D.Double xScreen = new Point2D.Double();
             
             graphToScreen.transform(xGraph, xScreen);
             
             g2d.drawLine((int)xScreen.getX(), (int)xScreen.getY()-3, (int)xScreen.getX(), (int)xScreen.getY()+3);     
-            g2d.drawString(""+xGraph.getX(), (int)xScreen.getX(), (int)xScreen.getY()-10);
+            
+            g2d.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
+            g2d.drawLine((int)xScreen.getX(), 0, (int)xScreen.getX(), height); 
+            g2d.setStroke(new BasicStroke(3.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
+            
+            String currLabelX;
+            if(Math.abs(xGraph.getX() - Math.round(xGraph.getX())) < 1e-6)
+                currLabelX =  "" + xGraph.getX();
+            else
+                currLabelX = String.format("%.1f", xGraph.getX());
+            
+            g2d.drawString(currLabelX, (int)xScreen.getX(), (int)xScreen.getY()-10);
             
         }
         
@@ -222,19 +237,33 @@ public class Grafico extends JPanel{
         
         dim_barra = max - (dim_assey / NUM_BARRE) < (dim_assey / NUM_BARRE) - min ? max : min;
         
-        for(int i=-(NUM_BARRE/2); i<NUM_BARRE; i++){
+        double startY = yGraphMin.getY();
+        startY += dim_barra;
+        startY += dim_barra - (startY % dim_barra);
+        
+        for(int i=0; i<NUM_BARRE*2; i++){
                
             if(i == 0)
                 continue;
             
-            Point2D.Double pGraph = new Point2D.Double(0, dim_barra*i);
+            Point2D.Double pGraph = new Point2D.Double(0, startY - dim_barra*i);
             Point2D.Double pScreen = new Point2D.Double();
             
             graphToScreen.transform(pGraph, pScreen);
             
-            g2d.drawLine((int)pScreen.getX()-3, (int)pScreen.getY(), (int)pScreen.getX()+3, (int)pScreen.getY());     
-            g2d.drawString(""+pGraph.getY(), (int)pScreen.getX()+4, (int)pScreen.getY());
+            g2d.drawLine((int)pScreen.getX()-3, (int)pScreen.getY(), (int)pScreen.getX()+3, (int)pScreen.getY());
             
+            g2d.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
+            g2d.drawLine(0, (int)pScreen.getY(), width, (int)pScreen.getY());
+            g2d.setStroke(new BasicStroke(3.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
+            
+            String currLabelY;
+            if(Math.abs(pGraph.getY() - Math.round(pGraph.getY())) < 1e-6)
+                currLabelY =  "" + pGraph.getY();
+            else
+                currLabelY = String.format("%.1f", pGraph.getY());
+            
+            g2d.drawString(currLabelY, (int)pScreen.getX(), (int)pScreen.getY()+4);
         }
         
         /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,7 +329,7 @@ public class Grafico extends JPanel{
     
     public void move(int x, int y){
         
-            mouseDragPoint = new Point2D.Double(x, y);
+        mouseDragPoint = new Point2D.Double(x, y);
                   
     }
     

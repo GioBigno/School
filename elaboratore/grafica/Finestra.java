@@ -94,22 +94,14 @@ public class Finestra extends JFrame implements ActionListener, MouseWheelListen
          grafico.move(e.getPoint().x, e.getPoint().y);
     }
     
-    public void mouseClicked(MouseEvent e){    
-    }
+    public void mouseClicked(MouseEvent e){}
 
+    public void mousePressed(MouseEvent e){}
 
-    public void mousePressed(MouseEvent e){
-    }
+    public void mouseReleased(MouseEvent e){}
 
+    public void mouseEntered(MouseEvent e){}
 
-    public void mouseReleased(MouseEvent e){
-    }
-
-    public void mouseEntered(MouseEvent e){       
-    }
-
-
-    public void mouseExited(MouseEvent e){      
-    }  
+    public void mouseExited(MouseEvent e){}  
     
 }

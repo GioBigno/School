@@ -31,7 +31,25 @@ public class TokenString {
     private void dividi(){
         
         //5+(2.56/6+13)-3
-        //TODO: -5 -> 0-5
+        //0 -> 0-5
+        for(int i=0; i<funzione.length(); i++){
+            if(funzione.charAt(i) == '-'){
+                if(i == 0){
+                    funzione = "0" + funzione;
+                    i++;
+                }else if(funzione.charAt(i-1) == '('){
+                    funzione = funzione.substring(0, i) + "0" + funzione.substring(i, funzione.length());
+                }
+            }
+        }
+        
+        funzione = funzione.replace("cos", "0c");
+        funzione = funzione.replace("abs", "0a");
+        funzione = funzione.replace("sin", "0s");
+        funzione = funzione.replace("sqrt", "0r");
+        funzione = funzione.replace("e", "2.71");
+        funzione = funzione.replace("pi", "3.14");
+        
         boolean numero = false;
         double valore=0; //valore di un numero con più cifre
         int decimale=0; //numero di cifre decimale di valore
@@ -99,6 +117,22 @@ public class TokenString {
                         //System.out.println("add simbolo");
                         tokenList.add(new Token(TipoToken.ELEVATO));
                         break;
+                    case 'c':
+                        //System.out.println("add simbolo");
+                        tokenList.add(new Token(TipoToken.COSENO));
+                        break;
+                    case 's':
+                        //System.out.println("add simbolo");
+                        tokenList.add(new Token(TipoToken.SENO));
+                        break;
+                    case 'a':
+                        //System.out.println("add a");
+                        tokenList.add(new Token(TipoToken.ABS));
+                        break;
+                    case 'r':
+                        //System.out.println("add simbolo");
+                        tokenList.add(new Token(TipoToken.SQRT));
+                        break;                        
                 }
                 
             }else if(Character.isLetter(corrente)){
@@ -206,6 +240,15 @@ public class TokenString {
                 return operatore2 / operatore1;
             case ELEVATO:
                 return Math.pow(operatore2, operatore1);
+            case COSENO:
+                return Math.cos(operatore1);
+            case SENO:
+                return Math.sin(operatore1);
+            case ABS:
+                return Math.abs(operatore1);
+            case SQRT:
+                return Math.sqrt(operatore1);
+                
         }
          
         return -1;
@@ -244,7 +287,11 @@ public class TokenString {
                 c == '/' ||
                 c == '^' ||
                 c == '(' ||
-                c == ')');
+                c == ')')||
+                c == 'c' ||
+                c == 's' ||
+                c == 'r' ||
+                c == 'a';
     }
     
 }
